@@ -50,8 +50,7 @@ type Card = (Suit, Rank)
 type Deck = [Card]
 
 cards :: [Card]
-cards = [(Spade, Two), (Diamond, Ace)]
--- cards = [ (s, r) | s <- [Spade .. Club], r <- [Ace .. King] ]
+cards = [ (s, r) | s <- [Spade .. Club], r <- [Ace .. King] ]
 
 genDeck :: (RandomGen r) => r -> Deck
 genDeck = shuffle' cards $ length cards
