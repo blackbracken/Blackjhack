@@ -1,6 +1,11 @@
-module Main where
+module Main(main) where
 
-import Lib
+import Blackjhack.Card
+import Control.Monad
+import System.Random
 
 main :: IO ()
-main = someFunc
+main = do
+  seed <- getStdGen
+  putStrLn $ show $ fst $ pull 1 $ genDeck seed
+
