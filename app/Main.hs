@@ -1,11 +1,16 @@
-module Main(main) where
+module Main
+  ( main
+  ) where
 
-import Blackjhack.Card
-import Control.Monad
-import System.Random
+import           Blackjhack.Card
+import           Blackjhack.Game
+import           Blackjhack.Participant
+import           Blackjhack.Participants.Player
+import           Control.Monad
+import           System.Random
 
 main :: IO ()
 main = do
   seed <- getStdGen
-  putStrLn $ show $ fst $ pull 1 $ genDeck seed
-
+  let deck = genDeck seed
+  print (fst $ prepareBoard deck [Player])
