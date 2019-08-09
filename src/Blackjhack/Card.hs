@@ -10,6 +10,7 @@ module Blackjhack.Card
 
 import           Blackjhack.Util
 import           Data.List
+import           Data.Ord
 import           System.Random
 import           System.Random.Shuffle
 
@@ -67,15 +68,15 @@ pull :: Int -> Deck -> ([Card], Deck)
 pull x deck = (take x deck, drop x deck)
 
 calcPoint :: [Card] -> Maybe Int
-calcPoint cs = headSafe . sort $ filter (<= 21) $ allCombinationsOfPoints cs
+calcPoint cs = headSafe . sortOn Down $ filter (<= 21) $ allCombinationsOfPoints cs
   where
     allCombinationsOfPoints :: [Card] -> [Int]
     allCombinationsOfPoints = foldr (\card rs -> nub $ concatMap (\r -> map (+ r) $ pointsOf card) rs) [0]
     pointsOf :: Card -> [Int]
-    pointsOf = pointsFromRank . rank
+    pointsOf = pointsFrom . rank
 
-pointsFromRank :: Rank -> [Int]
-pointsFromRank r
+pointsFrom :: Rank -> [Int]
+pointsFrom r
   | r == Ace = [1, 10]
   | r `elem` [King, Queen, Jack] = [10]
   | otherwise = [fromEnum r]

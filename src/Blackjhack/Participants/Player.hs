@@ -14,7 +14,7 @@ instance Participant Player where
     where
       askWhetherToHit :: IO Bool
       askWhetherToHit =
-        putStrLn "カードを引きますか? (yes/no):" >> getLine >>= \s ->
+        putStrLn "Are you sure you want to draw card (more)? [yes/no]:" >> getLine >>= \s ->
           case map toLower s of
             "yes" -> return True
             "no"  -> return False

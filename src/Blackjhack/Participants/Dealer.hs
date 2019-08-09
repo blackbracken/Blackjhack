@@ -15,5 +15,5 @@ instance Participant Dealer where
           then Hit
           else Stand
       Nothing -> Stand
-  expose _ cs = (Just $ head cs) : replicate (length cs - 1) Nothing
+  expose _ cs = map Just (take 1 cs) ++ replicate (length cs - 1) Nothing
   name _ = "Dealer"
