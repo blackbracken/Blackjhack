@@ -8,6 +8,7 @@ module Blackjhack.Card
   , calcPoint
   ) where
 
+import           Blackjhack.Util
 import           Data.List
 import           System.Random
 import           System.Random.Shuffle
@@ -72,12 +73,9 @@ calcPoint cs = headSafe . sort $ filter (<= 21) $ allCombinationsOfPoints cs
     allCombinationsOfPoints = foldr (\card rs -> nub $ concatMap (\r -> map (+ r) $ pointsOf card) rs) [0]
     pointsOf :: Card -> [Int]
     pointsOf = pointsFromRank . rank
-    pointsFromRank :: Rank -> [Int]
-    pointsFromRank r
-      | r == Ace = [1, 10]
-      | r `elem` [King, Queen, Jack] = [10]
-      | otherwise = [fromEnum r]
 
-headSafe :: [a] -> Maybe a
-headSafe (x:_) = Just x
-headSafe []    = Nothing
+pointsFromRank :: Rank -> [Int]
+pointsFromRank r
+  | r == Ace = [1, 10]
+  | r `elem` [King, Queen, Jack] = [10]
+  | otherwise = [fromEnum r]
