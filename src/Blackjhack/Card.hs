@@ -48,7 +48,7 @@ instance Show Rank where
   show King  = "King"
   show Queen = "Queen"
   show Jack  = "Jack"
-  show r     = show $ fromEnum r
+  show r     = show $ fromEnum r + 1
 
 data Card =
   Card
@@ -79,4 +79,4 @@ pointsFrom :: Rank -> [Int]
 pointsFrom r
   | r == Ace = [1, 10]
   | r `elem` [King, Queen, Jack] = [10]
-  | otherwise = [fromEnum r]
+  | otherwise = [fromEnum r + 1]
