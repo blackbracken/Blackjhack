@@ -71,7 +71,9 @@ calcPoint :: [Card] -> Maybe Int
 calcPoint cs = headSafe . sortOn Down $ filter (<= 21) $ allCombinationsOfPoints cs
   where
     allCombinationsOfPoints :: [Card] -> [Int]
-    allCombinationsOfPoints = foldr (\card rs -> nub $ concatMap (\r -> map (+ r) $ pointsOf card) rs) [0]
+    allCombinationsOfPoints = foldr combinePoint [0]
+    combinePoint :: Card -> [Int] -> [Int]
+    combinePoint card acc = nub $ concatMap (\x -> map (+ x) $ pointsOf card) acc
     pointsOf :: Card -> [Int]
     pointsOf = pointsFrom . rank
 

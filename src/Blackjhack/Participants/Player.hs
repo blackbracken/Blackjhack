@@ -23,6 +23,6 @@ instance Participant Player where
       tellCards cs = return ()
         --mapWithIndex (\(i, c) -> "* " ++ show (i + 1) ++ "番目に引いたカード: " + show c) cs
       mapWithIndex :: ((Int, a) -> b) -> [a] -> [b]
-      mapWithIndex p = zipWith (curry p) [0 ..]
+      mapWithIndex action = zipWith (curry action) [0 ..]
   expose _ = map Just
   name p = "Player-" ++ show (order p)
