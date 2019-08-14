@@ -10,19 +10,19 @@ newtype Player =
     }
 
 instance Participant Player where
-  decide _ (Hit, cs) = return Stand
+  decide _ (Hit, cards) = return Stand
     where
       askWhetherToHit :: IO Bool
       askWhetherToHit =
-        putStrLn "Are you sure you want to draw card (more)? [yes/no]:" >> getLine >>= \s ->
-          case map toLower s of
+        putStrLn "Are you sure you want to draw card (more)? [yes/no]:" >> getLine >>= \reply ->
+          case map toLower reply of
             "yes" -> return True
             "no"  -> return False
             _     -> askWhetherToHit
       tellCards :: [Card] -> IO ()
-      tellCards cs = return ()
+      tellCards cards = return ()
         --mapWithIndex (\(i, c) -> "* " ++ show (i + 1) ++ "番目に引いたカード: " + show c) cs
       mapWithIndex :: ((Int, a) -> b) -> [a] -> [b]
       mapWithIndex action = zipWith (curry action) [0 ..]
   expose _ = map Just
-  name p = "Player-" ++ show (order p)
+  name participant = "Player-" ++ show (order participant)

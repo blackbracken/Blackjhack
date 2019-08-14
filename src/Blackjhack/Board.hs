@@ -22,7 +22,7 @@ data Board =
     }
 
 prepareBoard :: Int -> Deck -> Board
-prepareBoard x d = Board d (Dealer, initialHand) $ map (\ord -> (Player ord, initialHand)) [1 .. x]
+prepareBoard x deck = Board deck (Dealer, initialHand) $ map (\order -> (Player order, initialHand)) [1 .. x]
   where
     initialHand :: Hand
     initialHand = (Hit, [])

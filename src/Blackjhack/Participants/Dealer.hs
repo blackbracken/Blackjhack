@@ -7,13 +7,13 @@ data Dealer =
   Dealer
 
 instance Participant Dealer where
-  decide _ (Hit, cs) =
+  decide _ (Hit, cards) =
     return $
-    case calcPoint cs of
+    case calcPoint cards of
       Just x ->
         if x < 17
           then Hit
           else Stand
       Nothing -> Stand
-  expose _ cs = map Just (take 1 cs) ++ replicate (length cs - 1) Nothing
+  expose _ cards = map Just (take 1 cards) ++ replicate (length cards - 1) Nothing
   name _ = "Dealer"

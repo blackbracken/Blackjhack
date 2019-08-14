@@ -59,7 +59,7 @@ data Card =
 type Deck = [Card]
 
 cards :: [Card]
-cards = [Card s r | s <- [Spade .. Club], r <- [Ace .. King]]
+cards = [Card suit rank | suit <- [Spade .. Club], rank <- [Ace .. King]]
 
 genDeck :: (RandomGen r) => r -> Deck
 genDeck = shuffle' cards $ length cards
@@ -68,7 +68,7 @@ pull :: Int -> Deck -> ([Card], Deck)
 pull x deck = (take x deck, drop x deck)
 
 calcPoint :: [Card] -> Maybe Int
-calcPoint cs = headSafe . sortOn Down $ filter (<= 21) $ allCombinationsOfPoints cs
+calcPoint cards = headSafe . sortOn Down $ filter (<= 21) $ allCombinationsOfPoints cards
   where
     allCombinationsOfPoints :: [Card] -> [Int]
     allCombinationsOfPoints = foldr combinePoint [0]
@@ -78,7 +78,7 @@ calcPoint cs = headSafe . sortOn Down $ filter (<= 21) $ allCombinationsOfPoints
     pointsOf = pointsFrom . rank
 
 pointsFrom :: Rank -> [Int]
-pointsFrom r
-  | r == Ace = [1, 10]
-  | r `elem` [King, Queen, Jack] = [10]
-  | otherwise = [fromEnum r + 1]
+pointsFrom rank
+  | rank == Ace = [1, 10]
+  | rank `elem` [King, Queen, Jack] = [10]
+  | otherwise = [fromEnum rank + 1]
