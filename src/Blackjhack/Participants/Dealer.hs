@@ -1,13 +1,20 @@
-module Blackjhack.Participants.Dealer where
+module Blackjhack.Participants.Dealer
+  ( Dealer
+  , dealer
+  ) where
 
 import           Blackjhack.Card
 import           Blackjhack.Participant
+import           Blackjhack.Situation
 
 data Dealer =
   Dealer
 
+dealer :: Dealer
+dealer = Dealer
+
 instance Participant Dealer where
-  decide _ (Hit, cards) =
+  decide _ cards =
     return $
     case calcPoint cards of
       Just x ->

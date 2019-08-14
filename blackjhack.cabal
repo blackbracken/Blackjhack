@@ -32,6 +32,8 @@ library
       Blackjhack.Participant
       Blackjhack.Participants.Dealer
       Blackjhack.Participants.Player
+      Blackjhack.Score
+      Blackjhack.Situation
       Blackjhack.Util
   other-modules:
       Paths_blackjhack

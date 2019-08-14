@@ -10,7 +10,7 @@ newtype Player =
     }
 
 instance Participant Player where
-  decide _ (Hit, cards) = return Stand
+  decide _ cards = return Stand
     where
       askWhetherToHit :: IO Bool
       askWhetherToHit =
