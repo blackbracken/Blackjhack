@@ -32,7 +32,6 @@ library
       Blackjhack.Participant
       Blackjhack.Participants.Dealer
       Blackjhack.Participants.Player
-      Blackjhack.Score
       Blackjhack.Situation
       Blackjhack.Util
   other-modules:
@@ -43,6 +42,7 @@ library
       base >=4.7 && <5
     , random
     , random-shuffle
+    , mtl
   default-language: Haskell2010
 
 executable blackjhack-exe

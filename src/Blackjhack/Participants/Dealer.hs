@@ -16,11 +16,11 @@ dealer = Dealer
 instance Participant Dealer where
   decide _ cards =
     return $
-    case calcPoint cards of
+    case computeMaximumScoreWithoutBusted cards of
       Just x ->
         if x < 17
           then Hit
           else Stand
       Nothing -> Stand
-  expose _ cards = map Just (take 1 cards) ++ replicate (length cards - 1) Nothing
+  hideHand _ cards = map Just (take 1 cards) ++ replicate (length cards - 1) Nothing
   name _ = "Dealer"

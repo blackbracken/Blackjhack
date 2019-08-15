@@ -11,5 +11,5 @@ data Intention
 
 class Participant a where
   decide :: a -> [Card] -> IO Intention
-  expose :: a -> [Card] -> [Maybe Card]
+  hideHand :: a -> [Card] -> [Maybe Card]
   name :: a -> String

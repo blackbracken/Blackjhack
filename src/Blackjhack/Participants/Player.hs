@@ -24,5 +24,5 @@ instance Participant Player where
         --mapWithIndex (\(i, c) -> "* " ++ show (i + 1) ++ "番目に引いたカード: " + show c) cs
       mapWithIndex :: ((Int, a) -> b) -> [a] -> [b]
       mapWithIndex action = zipWith (curry action) [0 ..]
-  expose _ = map Just
+  hideHand _ = map Just
   name participant = "Player-" ++ show (order participant)

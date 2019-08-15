@@ -5,7 +5,7 @@ module Blackjhack.Card
   , Deck
   , genDeck
   , pull
-  , calcPoint
+  , computeMaximumScoreWithoutBusted
   ) where
 
 import           Blackjhack.Util
@@ -67,18 +67,20 @@ genDeck = shuffle' cards $ length cards
 pull :: Int -> Deck -> ([Card], Deck)
 pull x deck = (take x deck, drop x deck)
 
-calcPoint :: [Card] -> Maybe Int
-calcPoint cards = headSafe . sortOn Down $ filter (<= 21) $ allCombinationsOfPoints cards
+computeMaximumScoreWithoutBusted :: [Card] -> Maybe Int
+computeMaximumScoreWithoutBusted cards = headSafe . sortOn Down . filterNotBusted $ allCombinationsOfScore cards
   where
-    allCombinationsOfPoints :: [Card] -> [Int]
-    allCombinationsOfPoints = foldr combinePoint [0]
-    combinePoint :: Card -> [Int] -> [Int]
-    combinePoint card acc = nub $ concatMap (\x -> map (+ x) $ pointsOf card) acc
-    pointsOf :: Card -> [Int]
-    pointsOf = pointsFrom . rank
+    allCombinationsOfScore :: [Card] -> [Int]
+    allCombinationsOfScore = foldr combineScore [0]
+    combineScore :: Card -> [Int] -> [Int]
+    combineScore card acc = nub $ concatMap (\x -> map (+ x) $ scoreOf card) acc
+    filterNotBusted :: [Int] -> [Int]
+    filterNotBusted = filter (<= 21)
+    scoreOf :: Card -> [Int]
+    scoreOf = score . rank
 
-pointsFrom :: Rank -> [Int]
-pointsFrom rank
+score :: Rank -> [Int]
+score rank
   | rank == Ace = [1, 10]
   | rank `elem` [King, Queen, Jack] = [10]
   | otherwise = [fromEnum rank + 1]
