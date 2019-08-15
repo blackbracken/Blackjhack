@@ -68,7 +68,7 @@ pull :: Int -> Deck -> ([Card], Deck)
 pull x deck = (take x deck, drop x deck)
 
 computeMaximumScoreWithoutBusted :: [Card] -> Maybe Int
-computeMaximumScoreWithoutBusted cards = headSafe . sortOn Down . filterNotBusted $ allCombinationsOfScore cards
+computeMaximumScoreWithoutBusted = headSafe . sortOn Down . filterNotBusted . allCombinationsOfScore
   where
     allCombinationsOfScore :: [Card] -> [Int]
     allCombinationsOfScore = foldr combineScore [0]
