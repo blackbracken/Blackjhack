@@ -2,24 +2,26 @@ module Blackjhack.Situation
   ( Intention(..)
   , Situation(..)
   , initialSituation
+  , decideToPull
   ) where
 
 import           Blackjhack.Card
 import           Blackjhack.Participant
+import           Data.Maybe
 
-type Situation p = (p, [Card], Intention)
+data Situation p =
+  Situation
+    { participant :: p
+    , hand        :: [Card]
+    , intention   :: Intention
+    }
 
 initialSituation :: (Participant a) => a -> Situation a
-initialSituation participant = (participant, [], Hit)
+initialSituation participant = Situation {participant = participant, hand = [], intention = Hit}
 
-turnNext :: (Participant a) => Situation a -> IO (Situation a)
-turnNext situation@(_, _, Stand)          = return situation
-turnNext situation@(participant, hand, _) = return situation
- -- case computeMaximumScoreWithoutBusted hand of
- --   Just _ ->
- --     intention <- decide participant hand
- --     case intention of
- --       Hit -> situation
- --       Stand -> situation
- --   Nothing -> return situation
- -- where
+decideToPull :: (Participant a) => Situation a -> IO Bool
+decideToPull Situation {intention = Stand} = return False
+decideToPull situation@Situation {participant = participant, hand = hand} =
+  case computeMaximumScoreWithoutBusted hand of
+    Just _  -> isHit <$> decide participant hand
+    Nothing -> return False
