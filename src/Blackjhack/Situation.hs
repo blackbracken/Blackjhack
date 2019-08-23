@@ -2,6 +2,7 @@ module Blackjhack.Situation
   ( Intention(..)
   , Situation(..)
   , initialSituation
+  , canDecide
   , decideToPull
   ) where
 
@@ -19,9 +20,12 @@ data Situation p =
 initialSituation :: (Participant a) => a -> Situation a
 initialSituation participant = Situation {participant = participant, hand = [], intention = Hit}
 
+canDecide :: (Participant a) => Situation a -> Bool
+canDecide Situation {intention = Stand} = False
+canDecide Situation {hand = hand} = isJust $ computeMaximumScoreWithoutBusted hand
+
 decideToPull :: (Participant a) => Situation a -> IO Bool
-decideToPull Situation {intention = Stand} = return False
 decideToPull situation@Situation {participant = participant, hand = hand} =
-  case computeMaximumScoreWithoutBusted hand of
-    Just _  -> isHit <$> decide participant hand
-    Nothing -> return False
+  if canDecide situation
+    then isHit <$> decide participant hand
+    else return False
