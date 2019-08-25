@@ -27,11 +27,9 @@ source-repository head
 
 library
   exposed-modules:
-      Blackjhack.Board
       Blackjhack.Card
+      Blackjhack.Game
       Blackjhack.Participant
-      Blackjhack.Participants.Dealer
-      Blackjhack.Participants.Player
       Blackjhack.Situation
       Blackjhack.Util
   other-modules:

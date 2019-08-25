@@ -4,7 +4,6 @@ module Blackjhack.Card
   , Card
   , Deck
   , genDeck
-  , pull
   , computeMaximumScoreWithoutBusted
   ) where
 
@@ -63,9 +62,6 @@ cards = [Card suit rank | suit <- [Spade .. Club], rank <- [Ace .. King]]
 
 genDeck :: (RandomGen r) => r -> Deck
 genDeck = shuffle' cards $ length cards
-
-pull :: Int -> Deck -> ([Card], Deck)
-pull x deck = (take x deck, drop x deck)
 
 computeMaximumScoreWithoutBusted :: [Card] -> Maybe Int
 computeMaximumScoreWithoutBusted = headSafe . sortOn Down . filterNotBusted . allCombinationsOfScore
