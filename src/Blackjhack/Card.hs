@@ -73,10 +73,10 @@ computeMaximumScoreWithoutBusted = headSafe . sortOn Down . filterNotBusted . al
     filterNotBusted :: [Int] -> [Int]
     filterNotBusted = filter (<= 21)
     scoreOf :: Card -> [Int]
-    scoreOf = score . rank
+    scoreOf = scores . rank
 
-score :: Rank -> [Int]
-score rank
+scores :: Rank -> [Int]
+scores rank
   | rank == Ace = [1, 10]
   | rank `elem` [King, Queen, Jack] = [10]
   | otherwise = [fromEnum rank + 1]
