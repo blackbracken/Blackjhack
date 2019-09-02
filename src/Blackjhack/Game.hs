@@ -1,6 +1,5 @@
 module Blackjhack.Game
-  ( Board(..)
-  , initialBoard
+  ( play
   ) where
 
 import           Blackjhack.Card
@@ -11,25 +10,10 @@ import           Control.Monad.State
 import           Data.Functor
 import           Data.Maybe
 
-data Board =
-  Board
-    { deck       :: Deck
-    , situations :: [Situation]
-    }
+type Result = [Situation]
 
-initialBoard :: Int -> Deck -> Board
-initialBoard x deck = Board deck $ initialSituation Dealer : map (initialSituation . Player) [1 .. x]
-
-play :: StateT Board IO Board
-play = get
-
-isEnded :: Board -> Bool
-isEnded Board {deck = deck, situations = situations} = null deck || none canDecide situations
-
-tellBoard :: Board -> IO ()
-tellBoard _ = putStrLn ""
-
-type Result = Maybe Int
-
-resultOf :: Situation -> Result
-resultOf Situation {hand = hand} = computeMaximumScoreWithoutBusted hand
+play :: Deck -> Int -> StateT Deck IO [Situation]
+play deck numberOfPlayers = return $ genSituations numberOfPlayers
+  where
+    genSituations :: Int -> [Situation]
+    genSituations number = initialSituation Dealer : map (initialSituation . Player) (1 ..< number)

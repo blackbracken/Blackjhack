@@ -3,11 +3,15 @@ module Blackjhack.Situation
   , initialSituation
   , canDecide
   , decideToPull
+  , pull
+  , playTurn
+  , resultOf
   ) where
 
 import           Blackjhack.Card
 import           Blackjhack.Participant
 import           Blackjhack.Util
+import           Control.Monad.State
 import           Data.Functor           ((<&>))
 import           Data.Maybe
 
@@ -21,19 +25,6 @@ data Situation =
 initialSituation :: Participant -> Situation
 initialSituation participant = Situation {participant = participant, hand = [], intention = Hit}
 
-playTurn :: Deck -> Situation -> IO (Deck, Situation)
-playTurn deck situation@Situation {participant = participant} =
-  decideToPull situation <&> \decision ->
-    if decision
-      then addCardToHand deck situation
-      else (deck, situation)
-  where
-    addCardToHand :: Deck -> Situation -> (Deck, Situation)
-    addCardToHand deck situation@Situation {hand = hand} =
-      case headSafe deck of
-        Just pulledCard -> (tail deck, situation {hand = hand ++ [pulledCard]})
-        Nothing -> (deck, situation)
-
 canDecide :: Situation -> Bool
 canDecide Situation {intention = Stand} = False
 canDecide Situation {hand = hand} = isJust $ computeMaximumScoreWithoutBusted hand
@@ -43,3 +34,21 @@ decideToPull situation@Situation {participant = participant, hand = hand} =
   if canDecide situation
     then isHit <$> decide participant hand
     else return False
+
+pull :: Int -> Situation -> State Deck Situation
+pull pulledNumber situation@Situation {hand = hand} = do
+  deck <- get
+  let pulledCard = take pulledNumber deck
+  put $ drop pulledNumber deck
+  return $ situation {hand = hand ++ pulledCard}
+
+playTurn :: Situation -> StateT Deck IO Situation
+playTurn situation = do
+  deck <- get
+  decisionToPull <- liftIO $ decideToPull situation
+  if decisionToPull
+    then liftStateT $ pull 1 situation
+    else return situation
+
+resultOf :: Situation -> Maybe Int
+resultOf Situation {hand = hand} = computeMaximumScoreWithoutBusted hand

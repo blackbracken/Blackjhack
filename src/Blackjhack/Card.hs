@@ -67,9 +67,9 @@ computeMaximumScoreWithoutBusted :: [Card] -> Maybe Int
 computeMaximumScoreWithoutBusted = headSafe . sortOn Down . filterNotBusted . allCombinationsOfScore
   where
     allCombinationsOfScore :: [Card] -> [Int]
-    allCombinationsOfScore = foldr combineScore [0]
-    combineScore :: Card -> [Int] -> [Int]
-    combineScore card acc = nub $ concatMap (\x -> map (+ x) $ scoreOf card) acc
+    allCombinationsOfScore = foldr (+>) [0]
+    (+>) :: Card -> [Int] -> [Int]
+    (+>) card acc = nub $ concatMap (\x -> map (+ x) $ scoreOf card) acc
     filterNotBusted :: [Int] -> [Int]
     filterNotBusted = filter (<= 21)
     scoreOf :: Card -> [Int]
