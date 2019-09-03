@@ -55,6 +55,9 @@ data Card =
     , rank :: Rank
     }
 
+instance Show Card where
+  show Card {suit = suit, rank = rank} = "[ " ++ show suit ++ " / " ++ show rank ++ " ]"
+
 type Deck = [Card]
 
 cards :: [Card]
