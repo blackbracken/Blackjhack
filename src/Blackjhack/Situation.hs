@@ -1,11 +1,9 @@
 module Blackjhack.Situation
   ( Situation(..)
   , initialSituation
-  , canDecide
   , decideToPull
   , pull
   , playTurn
-  , resultOf
   ) where
 
 import           Blackjhack.Card
@@ -25,15 +23,15 @@ data Situation =
 initialSituation :: Participant -> Situation
 initialSituation participant = Situation {participant = participant, hand = [], intention = Hit}
 
-canDecide :: Situation -> Bool
-canDecide Situation {intention = Stand} = False
-canDecide Situation {hand = hand} = isJust $ computeMaximumScoreWithoutBusted hand
-
 decideToPull :: Situation -> IO Bool
 decideToPull situation@Situation {participant = participant, hand = hand} =
   if canDecide situation
     then isHit <$> decide participant hand
     else return False
+  where
+    canDecide :: Situation -> Bool
+    canDecide Situation {intention = Stand} = False
+    canDecide Situation {hand = hand} = isJust $ computeMaximumScoreWithoutBusted hand
 
 pull :: Int -> Situation -> State Deck Situation
 pull pulledNumber situation@Situation {hand = hand} = do
@@ -47,8 +45,5 @@ playTurn situation = do
   deck <- get
   decisionToPull <- liftIO $ decideToPull situation
   if decisionToPull
-    then liftStateT $ pull 1 situation
+    then state . runState $ pull 1 situation
     else return situation
-
-resultOf :: Situation -> Maybe Int
-resultOf Situation {hand = hand} = computeMaximumScoreWithoutBusted hand

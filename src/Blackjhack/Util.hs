@@ -11,7 +11,3 @@ none predicate = not . any predicate
 
 (..<) :: Int -> Int -> [Int]
 (..<) start end = init [start .. end]
-
-liftStateT :: (Monad m) => State a b -> StateT a m b
-liftStateT = state . runState
-
