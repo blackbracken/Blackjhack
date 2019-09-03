@@ -12,8 +12,15 @@ import           Data.Maybe
 
 type Result = [Situation]
 
-play :: Deck -> Int -> StateT Deck IO [Situation]
-play deck numberOfPlayers = return $ genSituations numberOfPlayers
+play :: Deck -> Int -> IO [Situation]
+play deck numberOfPlayers = return $ evalState (dealInitialHand $ genSituations numberOfPlayers) deck
   where
     genSituations :: Int -> [Situation]
     genSituations number = initialSituation Dealer : map (initialSituation . Player) (1 ..< number)
+    dealInitialHand :: [Situation] -> State Deck [Situation]
+    dealInitialHand situations = do
+      put deck
+      forM situations $ \situation -> do
+        deck <- get
+        put $ drop 2 deck
+        return $ situation {hand = take 2 deck}
